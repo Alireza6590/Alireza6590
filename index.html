@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MR.bomber</title>
+  <style>
+    body {
+      background-color: black;
+      color: #00FF00;
+      font-family: monospace;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+    }
+    .container { display: none; }
+    .active { display: block; }
+    button {
+      background-color: #00FF00;
+      color: black;
+      border: 2px solid black;
+      padding: 20px 40px;
+      font-size: 2rem;
+      cursor: pointer;
+      border-radius: 10px;
+    }
+    #terminal {
+      background-color: black;
+      border: 1px solid #00FF00;
+      padding: 10px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      text-align: left;
+      margin: auto;
+      font-size: 0.9rem;
+    }
+    .app-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 15px;
+      padding: 20px;
+    }
+    .app-btn {
+      background-color: #00FF00;
+      color: black;
+      padding: 20px;
+      border-radius: 10px;
+      font-size: 1.2rem;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .app-btn:active { background-color: #44ff44; }
+  </style>
+</head>
+<body>
+
+  <!-- صفحه 1 -->
+  <div class="container active" id="page1">
+    <button onclick="goToPage(2)">HACK</button>
+  </div>
+
+  <!-- صفحه 2: وارد کردن شماره -->
+  <div class="container" id="page2">
+    <h2>Enter Target Number</h2>
+    <input type="text" id="phone" placeholder="+98..." style="padding:10px;font-size:1rem;">
+    <br><br>
+    <button onclick="startHack()">HACK</button>
+  </div>
+
+  <!-- صفحه 3: ترمینال جعلی -->
+  <div class="container" id="page3">
+    <h2>Hacking <span id="targetNumber"></span> ...</h2>
+    <div id="terminal"></div>
+  </div>
+
+  <!-- صفحه 4: لیست برنامه‌ها -->
+  <div class="container" id="page4">
+    <h2>Target Apps</h2>
+    <div class="app-grid">
+      <div class="app-btn" onclick="appClick('Instagram')">Instagram</div>
+      <div class="app-btn" onclick="appClick('WhatsApp')">WhatsApp</div>
+      <div class="app-btn" onclick="appClick('Telegram')">Telegram</div>
+      <div class="app-btn" onclick="appClick('Facebook')">Facebook</div>
+      <div class="app-btn" onclick="appClick('TikTok')">TikTok</div>
+      <div class="app-btn" onclick="appClick('Call of Duty')">Call of Duty</div>
+      <div class="app-btn" onclick="appClick('Clash of Clans')">Clash of Clans</div>
+      <div class="app-btn" onclick="appClick('PUBG')">PUBG</div>
+      <div class="app-btn" onclick="appClick('Free Fire')">Free Fire</div>
+      <div class="app-btn" onclick="appClick('Settings')">Settings</div>
+    </div>
+  </div>
+
+<script>
+  function goToPage(n) {
+    document.querySelectorAll('.container').forEach(p => p.classList.remove('active'));
+    document.getElementById('page' + n).classList.add('active');
+  }
+
+  function startHack() {
+    const number = document.getElementById('phone').value || 'Unknown';
+    document.getElementById('targetNumber').innerText = number;
+    goToPage(3);
+
+    const terminal = document.getElementById('terminal');
+    terminal.innerHTML = '';
+    const lines = [
+      'Connecting to server...',
+      'Bypassing firewall...',
+      'Accessing target...',
+      'Extracting data...',
+      'Decrypting passwords...',
+      'Loading files...',
+      'Injecting scripts...',
+      'Finalizing hack...'
+    ];
+
+    let randomTime = Math.floor(Math.random() * (30 - 10 + 1) + 10); // 10-30 min
+    let totalLines = randomTime * 20; // simulate lines
+    let count = 0;
+    let interval = setInterval(() => {
+      terminal.innerHTML += `[${count}] ${lines[Math.floor(Math.random()*lines.length)]}<br>`;
+      terminal.scrollTop = terminal.scrollHeight;
+      count++;
+      if (count > totalLines) {
+        clearInterval(interval);
+        goToPage(4);
+      }
+    }, 3000); // هر 3 ثانیه یه خط
+  }
+
+  function appClick(appName) {
+    alert(`Hacking ${appName}...`);
+  }
+</script>
+
+</body>
+</html>
