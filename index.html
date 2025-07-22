@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MR.bomber</title>
+  <style>
+    @keyframes blink {
+      0%, 50%, 100% { opacity: 1; }
+      25%, 75% { opacity: 0; }
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: black;
+      color: #00FF00;
+      font-family: monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      height: 100vh;
+    }
+
+    .container { display: none; padding: 20px; width: 100%; }
+    .active { display: block; }
+
+    button {
+      background: #00FF00;
+      color: black;
+      font-size: 2rem;
+      padding: 15px 40px;
+      border: 2px solid black;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    button:active { background: #44ff44; }
+
+    input {
+      font-size: 1.2rem;
+      padding: 10px;
+      border-radius: 5px;
+      outline: none;
+      border: 1px solid #00FF00;
+      background: black;
+      color: #00FF00;
+    }
+
+    #terminal {
+      width: 95%;
+      max-height: 70vh;
+      overflow-y: auto;
+      border: 1px solid #00FF00;
+      margin: 10px auto;
+      padding: 10px;
+      text-align: left;
+      font-size: 0.9rem;
+      background: black;
+    }
+
+    .progress-bar {
+      width: 90%;
+      height: 20px;
+      background: #111;
+      border: 1px solid #00FF00;
+      margin: 10px auto;
+      position: relative;
+    }
+    .progress-fill {
+      background: #00FF00;
+      height: 100%;
+      width: 0;
+      transition: width 0.3s;
+    }
+
+    .app-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 15px;
+      padding: 20px;
+    }
+
+    .app-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px;
+      background: #00FF00;
+      color: black;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .app-btn img {
+      width: 50px;
+      height: 50px;
+      margin-bottom: 5px;
+    }
+    .app-btn:active {
+      background: #44ff44;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- صفحه اول -->
+  <div class="container active" id="page1">
+    <button onclick="goToPage(2)">HACK</button>
+  </div>
+
+  <!-- صفحه دوم: شماره -->
+  <div class="container" id="page2">
+    <h2>Enter Target Number</h2>
+    <input type="text" id="phone" placeholder="+98...">
+    <br><br>
+    <button onclick="startHack()">HACK</button>
+  </div>
+
+  <!-- صفحه سوم: ترمینال جعلی -->
+  <div class="container" id="page3">
+    <h2>Hacking <span id="targetNumber"></span>...</h2>
+    <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+    <div id="terminal"></div>
+  </div>
+
+  <!-- صفحه چهارم: لیست برنامه‌ها -->
+  <div class="container" id="page4">
+    <h2>Target Apps</h2>
+    <div class="app-grid">
+      <div class="app-btn" onclick="appClick('Instagram')">
+        <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png">
+        Instagram
+      </div>
+      <div class="app-btn" onclick="appClick('WhatsApp')">
+        <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
+        WhatsApp
+      </div>
+      <div class="app-btn" onclick="appClick('Telegram')">
+        <img src="https://cdn-icons-png.flaticon.com/512/2111/2111644.png">
+        Telegram
+      </div>
+      <div class="app-btn" onclick="appClick('Call of Duty')">
+        <img src="https://cdn-icons-png.flaticon.com/512/888/888856.png">
+        Call of Duty
+      </div>
+      <div class="app-btn" onclick="appClick('Clash of Clans')">
+        <img src="https://cdn-icons-png.flaticon.com/512/888/888841.png">
+        Clash of Clans
+      </div>
+      <div class="app-btn" onclick="appClick('PUBG')">
+        <img src="https://cdn-icons-png.flaticon.com/512/888/888857.png">
+        PUBG
+      </div>
+      <div class="app-btn" onclick="appClick('TikTok')">
+        <img src="https://cdn-icons-png.flaticon.com/512/3046/3046122.png">
+        TikTok
+      </div>
+      <div class="app-btn" onclick="appClick('Settings')">
+        <img src="https://cdn-icons-png.flaticon.com/512/3524/3524631.png">
+        Settings
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function goToPage(n) {
+      document.querySelectorAll('.container').forEach(p => p.classList.remove('active'));
+      document.getElementById('page' + n).classList.add('active');
+    }
+
+    function startHack() {
+      const number = document.getElementById('phone').value || 'Unknown';
+      document.getElementById('targetNumber').innerText = number;
+      goToPage(3);
+
+      const terminal = document.getElementById('terminal');
+      terminal.innerHTML = '';
+      let progress = document.getElementById('progress');
+      let percent = 0;
+
+      const fakeLogs = [
+        'Connecting to server...',
+        'Bypassing firewall...',
+        'Finding open ports...',
+        'Exploiting vulnerabilities...',
+        'Extracting data...',
+        'Decrypting passwords...',
+        'Uploading payload...',
+        'Finalizing hack...',
+        'Access granted!'
+      ];
+
+      function logLine(text) {
+        let line = document.createElement('div');
+        line.textContent = text;
+        terminal.appendChild(line);
+        terminal.scrollTop = terminal.scrollHeight;
+      }
+
+      let interval = setInterval(() => {
+        logLine(fakeLogs[Math.floor(Math.random()*fakeLogs.length)]);
+        percent += Math.floor(Math.random() * 5) + 1;
+        if (percent > 100) percent = 100;
+        progress.style.width = percent + "%";
+
+        if (percent >= 100) {
+          clearInterval(interval);
+          setTimeout(() => goToPage(4), 1000);
+        }
+      }, 1000);
+    }
+
+    function appClick(appName) {
+      alert(`Attempting to hack ${appName}...`);
+    }
+  </script>
+
+</body>
+</html>
